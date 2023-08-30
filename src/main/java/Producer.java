@@ -20,12 +20,14 @@ public class Producer {
         mLogger.info("Producer initialized");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ExecutionException, InterruptedException {
+        String server = "127.0.0.1:9092";
+        String topic = "user_registered";
 
-
-
-
-
+        Producer producer = new Producer(server);
+        producer.put(topic, "user1", "John");
+        producer.put(topic, "user2", "Peter");
+        producer.close();
     }
 
 
@@ -53,8 +55,15 @@ public class Producer {
                     "Offset: " + recordMetadata.offset() + "\n" +
                     "Timestamp: " + recordMetadata.timestamp());
 
-        }).get();
+        //}).get();
+        });
 
+
+    }
+
+    void close(){
+        mLogger.info("Closing producer's connection");
+        mProducer.close();
     }
 
 
